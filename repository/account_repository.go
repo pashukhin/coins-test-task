@@ -1,33 +1,42 @@
-package main
+package repository
+
+import (
+	"github.com/jmoiron/sqlx"
+	"github.com/pashukhin/coins-test-task/entity"
+)
 
 type AccountRepository interface {
-	GetAll() (all []*Account, err error)
-	Get(id int64) (account *Account, err error)
-	Debit(acc *Account, amount float64) error
-	Credit(acc *Account, amount float64) error
+	GetAll() (all []*entity.Account, err error)
+	Get(id int64) (account *entity.Account, err error)
+	Debit(acc *entity.Account, amount float64) error
+	Credit(acc *entity.Account, amount float64) error
+}
+
+func NewAccountRepository(db *sqlx.DB) AccountRepository {
+	return &accountRepository{&repository{db}}
 }
 
 type accountRepository struct {
-	repository
+	*repository
 }
 
-func (a accountRepository) GetAll() (all []*Account, err error) {
+func (a accountRepository) GetAll() (all []*entity.Account, err error) {
 	err = a.db.Select(&all, "select * from account")
 	return
 }
 
-func (a accountRepository) Get(id int64) (account *Account, err error) {
-	account = &Account{}
+func (a accountRepository) Get(id int64) (account *entity.Account, err error) {
+	account = &entity.Account{}
 	err = a.db.Get(account, "select * from account where id = $1", id)
 	return
 }
 
 
-func (a accountRepository) Debit(acc *Account, amount float64) error {
+func (a accountRepository) Debit(acc *entity.Account, amount float64) error {
 	return a.ExecForOne("update account set balance = balance - $1 where id = $2 and balance >= $1", amount, acc.ID)
 }
 
-func (a accountRepository) Credit(acc *Account, amount float64) error {
+func (a accountRepository) Credit(acc *entity.Account, amount float64) error {
 	return a.ExecForOne("update account set balance = balance + $1 where id = $2", amount, acc.ID)
 }
 

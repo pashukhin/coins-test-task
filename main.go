@@ -1,63 +1,57 @@
 package main
 
 import (
+	"github.com/pashukhin/coins-test-task/business"
+	"github.com/pashukhin/coins-test-task/middleware"
+	"github.com/pashukhin/coins-test-task/repository"
 	"net/http"
 	"os"
 
-	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/go-kit/kit/log"
-	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	httptransport "github.com/go-kit/kit/transport/http"
 
-	sqlx "github.com/jmoiron/sqlx"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 
-	db, err := sqlx.Connect("postgres", "host=db port=5432 user=user password=password dbname=db sslmode=disable")
+	//db, err := sqlx.Connect("postgres", "host=db port=5432 user=user password=password dbname=db sslmode=disable")
+	db, err := sqlx.Connect("postgres", "host=127.0.0.1 port=5432 user=user password=password dbname=db sslmode=disable")
 	if err != nil {
-		logger.Log("err", err)
+		if err := logger.Log("err", err); err != nil {
+			panic(err)
+		}
 		return
 	}
 
-	var svc Service
-	svc = service{
-		storage: storage{db},
-	}
-	svc = loggingMiddleware{logger, svc}
+	accounts := repository.NewAccountRepository(db)
+	payments := repository.NewPaymentRepository(db)
+	service := business.NewService()
+	service.SetAccountRepository(accounts)
+	service.SetPaymentRepository(payments)
 
-	fieldKeys := []string{"method", "error"}
-	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
-		Namespace: "group",
-		Subsystem: "service",
-		Name:      "request_count",
-		Help:      "Number of requests received.",
-	}, fieldKeys)
-	requestLatency := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
-		Namespace: "group",
-		Subsystem: "service",
-		Name:      "request_latency_microseconds",
-		Help:      "Total duration of requests in microseconds.",
-	}, fieldKeys)
+	loggingMiddleware := middleware.NewLoggingMiddleware(logger)
+	loggingMiddleware.SetNext(service)
 
-	svc = instrumentingMiddleware{requestCount, requestLatency, svc}
+	instrumentingMiddleware := middleware.NewInstrumentingMiddleware()
+	instrumentingMiddleware.SetNext(loggingMiddleware)
 
 	accountsHandler := httptransport.NewServer(
-		makeAccountsEndpoint(svc),
+		makeAccountsEndpoint(instrumentingMiddleware),
 		decodeAccountsRequest,
 		encodeResponse,
 	)
 	paymentsHandler := httptransport.NewServer(
-		makePaymentsEndpoint(svc),
+		makePaymentsEndpoint(instrumentingMiddleware),
 		decodePaymentsRequest,
 		encodeResponse,
 	)
 	sendHandler := httptransport.NewServer(
-		makeSendEndpoint(svc),
+		makeSendEndpoint(instrumentingMiddleware),
 		decodeSendRequest,
 		encodeResponse,
 	)

@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"github.com/pashukhin/coins-test-task/entity"
+	"github.com/pashukhin/coins-test-task/service"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 )
 
-func makeAccountsEndpoint(svc Service) endpoint.Endpoint {
+func makeAccountsEndpoint(svc service.Service) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		v, err := svc.Accounts()
 		if err != nil {
@@ -35,11 +37,11 @@ type accountsRequest struct {
 }
 
 type accountsResponse struct {
-	Accounts []*Account `json:"accounts"`
-	Err      string     `json:"err,omitempty"`
+	Accounts []*entity.Account `json:"accounts"`
+	Err      string            `json:"err,omitempty"`
 }
 
-func makePaymentsEndpoint(svc Service) endpoint.Endpoint {
+func makePaymentsEndpoint(svc service.Service) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		v, err := svc.Payments()
 		if err != nil {
@@ -58,15 +60,15 @@ func decodePaymentsRequest(_ context.Context, r *http.Request) (interface{}, err
 }
 
 type paymentsRequest struct {
-	// techincally, here may be some filters or so
+	// technically, here may be some filters or so
 }
 
 type paymentsResponse struct {
-	Payments []*Payment `json:"payments"`
-	Err      string     `json:"err,omitempty"`
+	Payments []*entity.Payment `json:"payments"`
+	Err      string            `json:"err,omitempty"`
 }
 
-func makeSendEndpoint(svc Service) endpoint.Endpoint {
+func makeSendEndpoint(svc service.Service) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(sendRequest)
 		payment, err := svc.Send(req.From, req.To, req.Amount)
@@ -86,13 +88,13 @@ func decodeSendRequest(_ context.Context, r *http.Request) (interface{}, error) 
 }
 
 type sendRequest struct {
-	From   string  `json:"from"`
-	To     string  `json:"to"`
+	From   int64   `json:"from"`
+	To     int64   `json:"to"`
 	Amount float64 `json:"amount"`
-	// techincally, here may be some filters or so
+	// technically, here may be some filters or so
 }
 
 type sendResponse struct {
-	Payment *Payment `json:"payment"`
-	Err     string   `json:"err,omitempty"`
+	Payment *entity.Payment `json:"payment"`
+	Err     string          `json:"err,omitempty"`
 }
