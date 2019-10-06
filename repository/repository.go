@@ -6,7 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-var errStorageRowsAffected = errors.New(" count of affected rows is not 1")
+var ErrStorageRowsAffected = errors.New(" count of affected rows is not 1")
 
 type repository struct {
 	db *sqlx.DB
@@ -22,7 +22,7 @@ func (r repository) ExecForOne(sql string, args ...interface{}) error {
 		return err
 	}
 	if rows != 1 {
-		return errStorageRowsAffected
+		return ErrStorageRowsAffected
 	}
 	return nil
 }

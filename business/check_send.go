@@ -1,6 +1,16 @@
 package business
 
-import "github.com/pashukhin/coins-test-task/entity"
+import (
+	"errors"
+	"github.com/pashukhin/coins-test-task/entity"
+)
+
+// constant errors
+var (
+	errZeroAmount = errors.New("amount must be greater than 0")
+	errNotEnoughBalance = errors.New("amount must be greater than sender balance")
+	errDifferentCurrencies = errors.New("only transactions between accounts with the same currencies are allowed")
+)
 
 // checkSend checks business conditions for Send operation
 // returns accounts or error if conditions are not met

@@ -1,7 +1,6 @@
 package business
 
 import (
-	"errors"
 	"github.com/pashukhin/coins-test-task/entity"
 	"github.com/pashukhin/coins-test-task/repository"
 	"github.com/pashukhin/coins-test-task/service"
@@ -16,11 +15,6 @@ type ServiceImpl interface {
 func NewService() ServiceImpl {
 	return &serviceImpl{}
 }
-
-// constant errors
-var errZeroAmount = errors.New("amount must be greater than 0")
-var errNotEnoughBalance = errors.New("amount must be greater than sender balance")
-var errDifferentCurrencies = errors.New("only transactions between accounts with the same currencies are allowed")
 
 type serviceImpl struct {
 	accounts repository.AccountRepository
