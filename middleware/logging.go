@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/pashukhin/coins-test-task/entity"
+	"github.com/pashukhin/coins-test-task/service"
 	"time"
 
 	"github.com/go-kit/kit/log"
@@ -8,10 +10,10 @@ import (
 
 type loggingMiddleware struct {
 	logger log.Logger
-	next   Service
+	next   service.Service
 }
 
-func (mw loggingMiddleware) Accounts() (output []*Account, err error) {
+func (mw loggingMiddleware) Accounts() (output []*entity.Account, err error) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "accounts",
@@ -24,7 +26,7 @@ func (mw loggingMiddleware) Accounts() (output []*Account, err error) {
 	return
 }
 
-func (mw loggingMiddleware) Payments() (output []*Payment, err error) {
+func (mw loggingMiddleware) Payments() (output []*entity.Payment, err error) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "payments",
@@ -37,7 +39,7 @@ func (mw loggingMiddleware) Payments() (output []*Payment, err error) {
 	return
 }
 
-func (mw loggingMiddleware) Send(fromID, toID string, amount float64) (output *Payment, err error) {
+func (mw loggingMiddleware) Send(fromID, toID int64, amount float64) (output *entity.Payment, err error) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "send",
