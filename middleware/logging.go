@@ -54,3 +54,16 @@ func (mw *loggingMiddleware) Send(fromID, toID int64, amount float64) (output *e
 	output, err = mw.next.Send(fromID, toID, amount)
 	return
 }
+
+func (mw *loggingMiddleware) Account(id int64) (output *entity.Account, err error) {
+	defer func(begin time.Time) {
+		_ = mw.logger.Log(
+			"method", "account",
+			"err", err,
+			"took", time.Since(begin),
+		)
+	}(time.Now())
+
+	output, err = mw.next.Account(id)
+	return
+}

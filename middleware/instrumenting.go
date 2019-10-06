@@ -71,3 +71,14 @@ func (mw *instrumentingMiddleware) Send(fromID, toID int64, amount float64) (out
 	output, err = mw.next.Send(fromID, toID, amount)
 	return
 }
+
+func (mw *instrumentingMiddleware) Account(id int64) (output *entity.Account, err error) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "account", "error", fmt.Sprint(err != nil)}
+		mw.requestCount.With(lvs...).Add(1)
+		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+	}(time.Now())
+
+	output, err = mw.next.Account(id)
+	return
+}
