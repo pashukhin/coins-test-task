@@ -6,6 +6,8 @@ import (
 	"github.com/pashukhin/coins-test-task/service"
 )
 
+// ServiceImpl is interface for business logic implementations.
+// It adds two methods for set entity repositories to Service
 type ServiceImpl interface {
 	service.Service
 	SetAccountRepository(accounts repository.AccountRepository)
@@ -21,10 +23,14 @@ type serviceImpl struct {
 	payments repository.PaymentRepository
 }
 
+// SetAccountRepository makes oly just described in its name.
+// Used for inversion of control pattern.
 func (s *serviceImpl) SetAccountRepository(accounts repository.AccountRepository) {
 	s.accounts = accounts
 }
 
+// SetPaymentRepository makes oly just described in its name.
+// Used for inversion of control pattern.
 func (s *serviceImpl) SetPaymentRepository(payments repository.PaymentRepository) {
 	s.payments = payments
 }

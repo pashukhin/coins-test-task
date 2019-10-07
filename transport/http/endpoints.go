@@ -24,6 +24,10 @@ func MakeServerEndpoints(s service.Service) Endpoints {
 	}
 }
 
+type getAccountsRequest struct {
+	// mb some filters here
+}
+
 type getAccountsResponse struct {
 	Accounts []*entity.Account `json:"accounts"`
 	Err      error             `json:"err,omitempty"`
@@ -31,14 +35,18 @@ type getAccountsResponse struct {
 
 func MakeGetAccountsEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-		//req := request.(getAccounts)
+		//req := request.(getAccountsRequest)
 		accounts, e := s.Accounts()
 		return getAccountsResponse{accounts, e}, e
 	}
 }
 
+type getPaymentsRequest struct {
+	// mb some filters here
+}
+
 type getPaymentsResponse struct {
-	Payments []*entity.Payment `json:"accounts"`
+	Payments []*entity.Payment `json:"payments"`
 	Err      error             `json:"err,omitempty"`
 }
 
@@ -54,7 +62,6 @@ type postPaymentRequest struct {
 	From   int64   `json:"from"`
 	To     int64   `json:"to"`
 	Amount float64 `json:"amount"`
-	// technically, here may be some filters or so
 }
 
 type postPaymentResponse struct {
@@ -85,7 +92,4 @@ func MakeGetAccountEndpoint(s service.Service) endpoint.Endpoint {
 		account, e := s.Account(req.ID)
 		return getAccountResponse{account, e}, e
 	}
-}
-
-type emptyRequest struct {
 }

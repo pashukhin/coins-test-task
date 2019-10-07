@@ -39,19 +39,19 @@ func MakeHTTPHandler(s service.Service, logger log.Logger) http.Handler {
 	// GET	/account/{id}/payment/outgoing	list incoming payments for account
 	// GET	/payment/{id}					get single payment
 
-	r.Methods("GET").Path("/account/").Handler(httptransport.NewServer(
+	r.Methods("GET").Path("/account").Handler(httptransport.NewServer(
 		e.GetAccounts,
 		decodeGetAccountsRequest,
 		encodeResponse,
 		options...,
 	))
-	r.Methods("GET").Path("/payment/").Handler(httptransport.NewServer(
+	r.Methods("GET").Path("/payment").Handler(httptransport.NewServer(
 		e.GetPayments,
 		decodeGetPaymentsRequest,
 		encodeResponse,
 		options...,
 	))
-	r.Methods("POST").Path("/payment/").Handler(httptransport.NewServer(
+	r.Methods("POST").Path("/payment").Handler(httptransport.NewServer(
 		e.PostPayment,
 		decodePostPaymentRequest,
 		encodeResponse,
@@ -68,11 +68,11 @@ func MakeHTTPHandler(s service.Service, logger log.Logger) http.Handler {
 }
 
 func decodeGetAccountsRequest(_ context.Context, r *http.Request) (request interface{}, err error) {
-	return emptyRequest{}, nil
+	return getAccountsRequest{}, nil
 }
 
 func decodeGetPaymentsRequest(_ context.Context, r *http.Request) (request interface{}, err error) {
-	return emptyRequest{}, nil
+	return getPaymentsRequest{}, nil
 }
 
 func decodePostPaymentRequest(_ context.Context, r *http.Request) (request interface{}, err error) {

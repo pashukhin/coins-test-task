@@ -17,7 +17,7 @@ func (s *serviceImpl) Send(fromID, toID int64, amount float64) (p *entity.Paymen
 	createPaymentStage := stages.NewCreatePaymentStage(s.payments, accFrom, accTo, amount)
 	creditTargetStage := stages.NewCreditTargetStage(s.accounts, accTo, amount)
 
-	paymentSaga := saga.NewSaga()
+	paymentSaga := saga.NewSagaImpl()
 	if err = paymentSaga.Init(debitSourceStage, createPaymentStage, creditTargetStage); err != nil{
 		return
 	}
