@@ -35,7 +35,7 @@ func (mw *loggingMiddleware) Accounts() (output []*entity.Account, err error) {
 
 func (mw *loggingMiddleware) Payments() (output []*entity.Payment, err error) {
 	defer func(begin time.Time) {
-		mw.internal("accounts", begin, err)
+		mw.internal("payments", begin, err)
 	}(time.Now())
 
 	output, err = mw.next.Payments()
@@ -44,7 +44,7 @@ func (mw *loggingMiddleware) Payments() (output []*entity.Payment, err error) {
 
 func (mw *loggingMiddleware) Send(fromID, toID int64, amount float64) (output *entity.Payment, err error) {
 	defer func(begin time.Time) {
-		mw.internal("accounts", begin, err)
+		mw.internal("send", begin, err)
 	}(time.Now())
 
 	output, err = mw.next.Send(fromID, toID, amount)
@@ -53,7 +53,7 @@ func (mw *loggingMiddleware) Send(fromID, toID int64, amount float64) (output *e
 
 func (mw *loggingMiddleware) Account(id int64) (output *entity.Account, err error) {
 	defer func(begin time.Time) {
-		mw.internal("accounts", begin, err)
+		mw.internal("account", begin, err)
 	}(time.Now())
 
 	output, err = mw.next.Account(id)
