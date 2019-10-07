@@ -1,3 +1,4 @@
+// Package http contains methods for http transport.
 package http
 
 import (
@@ -20,8 +21,7 @@ var (
 	ErrBadRouting = errors.New("inconsistent mapping between route and handler (programmer error)")
 )
 
-// MakeHTTPHandler mounts all of the service endpoints into an http.Handler.
-// Useful in a profilesvc server.
+// MakeHTTPHandler mounts all service endpoints into an http.Handler.
 func MakeHTTPHandler(s service.Service, logger log.Logger) http.Handler {
 	r := mux.NewRouter()
 	e := MakeServerEndpoints(s)
@@ -85,11 +85,11 @@ func decodePostPaymentRequest(_ context.Context, r *http.Request) (request inter
 
 func decodeGetAccountRequest(_ context.Context, r *http.Request) (request interface{}, err error) {
 	vars := mux.Vars(r)
-	strId, ok := vars["id"]
+	strID, ok := vars["id"]
 	if !ok {
 		return nil, ErrBadRouting
 	}
-	id, err := strconv.ParseInt(strId, 10, 0)
+	id, err := strconv.ParseInt(strID, 10, 0)
 	if err != nil {
 		return nil, err
 	}

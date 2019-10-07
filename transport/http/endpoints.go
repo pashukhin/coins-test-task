@@ -8,19 +8,21 @@ import (
 	"github.com/go-kit/kit/endpoint"
 )
 
+// Endpoints is helper struct containing http transport endpoints.
 type Endpoints struct {
-	GetAccounts endpoint.Endpoint
-	GetPayments endpoint.Endpoint
-	PostPayment endpoint.Endpoint
+	GetAccounts        endpoint.Endpoint
+	GetPayments        endpoint.Endpoint
+	PostPayment        endpoint.Endpoint
 	GetAccountEndpoint endpoint.Endpoint
 }
 
+// MakeServerEndpoints makes endpoints for http server.
 func MakeServerEndpoints(s service.Service) Endpoints {
 	return Endpoints{
-		GetAccounts: MakeGetAccountsEndpoint(s),
-		GetPayments: MakeGetPaymentsEndpoint(s),
-		PostPayment: MakePostPaymentEndpoint(s),
-		GetAccountEndpoint: MakeGetAccountEndpoint(s),
+		GetAccounts:        makeGetAccountsEndpoint(s),
+		GetPayments:        makeGetPaymentsEndpoint(s),
+		PostPayment:        makePostPaymentEndpoint(s),
+		GetAccountEndpoint: makeGetAccountEndpoint(s),
 	}
 }
 
@@ -33,7 +35,7 @@ type getAccountsResponse struct {
 	Err      error             `json:"err,omitempty"`
 }
 
-func MakeGetAccountsEndpoint(s service.Service) endpoint.Endpoint {
+func makeGetAccountsEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		//req := request.(getAccountsRequest)
 		accounts, e := s.Accounts()
@@ -50,7 +52,7 @@ type getPaymentsResponse struct {
 	Err      error             `json:"err,omitempty"`
 }
 
-func MakeGetPaymentsEndpoint(s service.Service) endpoint.Endpoint {
+func makeGetPaymentsEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		//req := request.(getAccounts)
 		payments, e := s.Payments()
@@ -69,7 +71,7 @@ type postPaymentResponse struct {
 	Err     error           `json:"err,omitempty"`
 }
 
-func MakePostPaymentEndpoint(s service.Service) endpoint.Endpoint {
+func makePostPaymentEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(postPaymentRequest)
 		payment, err := s.Send(req.From, req.To, req.Amount)
@@ -83,10 +85,10 @@ type getAccountRequest struct {
 
 type getAccountResponse struct {
 	Accounts *entity.Account `json:"account"`
-	Err      error             `json:"err,omitempty"`
+	Err      error           `json:"err,omitempty"`
 }
 
-func MakeGetAccountEndpoint(s service.Service) endpoint.Endpoint {
+func makeGetAccountEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(getAccountRequest)
 		account, e := s.Account(req.ID)

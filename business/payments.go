@@ -2,6 +2,7 @@ package business
 
 import "github.com/pashukhin/coins-test-task/entity"
 
-func (s *serviceImpl) Payments() ([]*entity.Payment, error) {
+// Payments returns list of payments of error if fails.
+func (s *Logic) Payments() ([]*entity.Payment, error) {
 	return s.payments.GetAll()
 }

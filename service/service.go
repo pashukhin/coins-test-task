@@ -1,3 +1,4 @@
+// Package service contains definition of Service interface.
 package service
 
 import "github.com/pashukhin/coins-test-task/entity"

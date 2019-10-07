@@ -1,3 +1,4 @@
+// Package repository contains entity repositories.
 package repository
 
 import (
@@ -6,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// ErrStorageRowsAffected is error which throws where sql query affects not exactly one row.
 var ErrStorageRowsAffected = errors.New(" count of affected rows is not 1")
 
 type repository struct {

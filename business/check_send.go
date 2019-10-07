@@ -7,14 +7,14 @@ import (
 
 // constant errors
 var (
-	errZeroAmount = errors.New("amount must be greater than 0")
-	errNotEnoughBalance = errors.New("amount must be greater than sender balance")
+	errZeroAmount          = errors.New("amount must be greater than 0")
+	errNotEnoughBalance    = errors.New("amount must be greater than sender balance")
 	errDifferentCurrencies = errors.New("only transactions between accounts with the same currencies are allowed")
 )
 
 // checkSend checks business conditions for Send operation
 // returns accounts or error if conditions are not met
-func (s *serviceImpl) checkSend(fromID, toID int64, amount float64) (accFrom, accTo *entity.Account, err error) {
+func (s *Logic) checkSend(fromID, toID int64, amount float64) (accFrom, accTo *entity.Account, err error) {
 	//check business logic
 	// zero amount in request
 	if amount <= 0 {

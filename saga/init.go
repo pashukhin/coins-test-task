@@ -2,8 +2,8 @@ package saga
 
 import "errors"
 
-// AddStage adds stage into sagaImpl, like it described in its name
-func (s *sagaImpl) Init(stages ...Stage) error {
+// AddStages adds stage into SimpleSaga, like it described in its name
+func (s *SimpleSaga) AddStages(stages ...Stage) error {
 	if len(stages) == 0 {
 		return errors.New("empty stage list")
 	}

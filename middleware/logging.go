@@ -7,6 +7,7 @@ import (
 	"github.com/go-kit/kit/log"
 )
 
+// NewLoggingMiddleware makes new loggingMiddleware and returns it as Middleware
 func NewLoggingMiddleware(logger log.Logger) Middleware {
 	return &loggingMiddleware{middleware: &middleware{}, logger: logger}
 }

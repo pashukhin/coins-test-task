@@ -107,7 +107,7 @@ func (p *paymentRepositoryMock) Get(id int64) (payment *entity.Payment, err erro
 }
 
 func (p *paymentRepositoryMock) Create(from, to *entity.Account, amount float64) (payment *entity.Payment, err error) {
-	payment = &entity.Payment{ID:int64(len(p.Data))+1, FromID: from.ID, ToID: to.ID, Amount: amount}
+	payment = &entity.Payment{ID: int64(len(p.Data)) + 1, FromID: from.ID, ToID: to.ID, Amount: amount}
 	p.Data = append(p.Data, payment)
 	return
 }
@@ -164,7 +164,7 @@ func Test_serviceImpl_Account(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &serviceImpl{
+			s := &Logic{
 				accounts: tt.fields.accounts,
 				payments: tt.fields.payments,
 			}
@@ -204,7 +204,7 @@ func Test_serviceImpl_Accounts(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &serviceImpl{
+			s := &Logic{
 				accounts: tt.fields.accounts,
 				payments: tt.fields.payments,
 			}
@@ -244,7 +244,7 @@ func Test_serviceImpl_Payments(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &serviceImpl{
+			s := &Logic{
 				accounts: tt.fields.accounts,
 				payments: tt.fields.payments,
 			}
@@ -292,7 +292,7 @@ func Test_serviceImpl_Send(t *testing.T) {
 				account2.ID,
 				1,
 			},
-			&entity.Payment{ID:1, FromID: account1.ID, ToID: account2.ID, Amount: 1},
+			&entity.Payment{ID: 1, FromID: account1.ID, ToID: account2.ID, Amount: 1},
 			false,
 		},
 		{
@@ -368,7 +368,7 @@ func Test_serviceImpl_Send(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &serviceImpl{
+			s := &Logic{
 				accounts: tt.fields.accounts,
 				payments: tt.fields.payments,
 			}

@@ -5,7 +5,8 @@ import (
 	"github.com/pashukhin/coins-test-task/entity"
 )
 
-type PaymentRepository interface{
+// PaymentRepository declares methods for payment repository implementations.
+type PaymentRepository interface {
 	GetAll() (all []*entity.Payment, err error)
 	GetIncomingFor(acc *entity.Account) (list []*entity.Payment, err error)
 	GetOutgoingFor(acc *entity.Account) (list []*entity.Payment, err error)
@@ -15,6 +16,7 @@ type PaymentRepository interface{
 	Delete(payment *entity.Payment) error
 }
 
+// NewPaymentRepository makes new paymentRepository and returns it as PaymentRepository
 func NewPaymentRepository(db *sqlx.DB) PaymentRepository {
 	return &paymentRepository{&repository{db}}
 }

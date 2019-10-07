@@ -41,22 +41,22 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
-    m, err := migrate.NewWithDatabaseInstance(
-        "file://db/migrations",
-        "postgres", driver)
-    if err != nil {
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://db/migrations",
+		"postgres", driver)
+	if err != nil {
 		panic(err)
 	}
-    if err := m.Up(); err != nil {
-    	if err != migrate.ErrNoChange {
+	if err := m.Up(); err != nil {
+		if err != migrate.ErrNoChange {
 			panic(err)
 		}
 	}
 
 	accounts := repository.NewAccountRepository(db)
 	payments := repository.NewPaymentRepository(db)
-	service := business.NewService()
+	service := business.NewLogic()
 	service.SetAccountRepository(accounts)
 	service.SetPaymentRepository(payments)
 
