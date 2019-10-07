@@ -6,9 +6,9 @@ Test task for coins.ph. It was simple, isn't it?
 
 ## Used libraries
 
-https://github.com/go-kit/kit for base of service.
-https://github.com/jmoiron/sqlx for working with database.
-https://github.com/golang-migrate/migrate for database migrations.
+- https://github.com/go-kit/kit for base of service.
+- https://github.com/jmoiron/sqlx for working with database.
+- https://github.com/golang-migrate/migrate for database migrations.
 
 ## Running service
 
