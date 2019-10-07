@@ -1,6 +1,6 @@
 # coins-test-task
 
-##Purpose
+## Purpose
 
 Test task for coins.ph. It was simple, isn't it?
 
@@ -10,22 +10,22 @@ https://github.com/go-kit/kit for base of service.
 https://github.com/jmoiron/sqlx for working with database.
 https://github.com/golang-migrate/migrate for database migrations.
 
-##Running service
+## Running service
 
 Run `docker-compose up` in project directory.
 
 
-##Run tests
+## Run tests
 
 Run `go test github.com/pashukhin/coins-test-task/business`
 
-##Documentation
+## Documentation
 
 Read go docs on http://localhost:6060/pkg/github.com/pashukhin/coins-test-task/ after running `godoc -http=:6060` in project directory.
 
 Http api docs also available in api.md file.
 
-##What applications do on start-up
+## What applications do on start-up
 
 1. Trying to connect to database.
 2. If ok, trying to apply db migrations to database.
