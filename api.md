@@ -1,7 +1,9 @@
 #Api docs
+
 Documentation for http api methods.
 
 ##Account list
+
 Available on `/account`.
 Returns list of all accounts in database.
 
@@ -11,6 +13,7 @@ $ curl localhost:8080/account
 ```
 
 ##Send
+
 Available on `/send`.
 Makes money transfer between given accounts on given amount.
 On success returns newly created payment.
@@ -33,6 +36,7 @@ $ curl -d '{"from":3,"to":1,"amount":1}' -H "Content-Type: application/json" -X 
 ```
 
 ##Payment list
+
 Available on `/payment`.
 Returns list of all payments in database.
 ```
@@ -41,6 +45,7 @@ $ curl localhost:8080/payment
 ```
 
 ##Account by id
+
 Available on `/account/{id}`.
 Returns single account from database.
 
